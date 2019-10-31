@@ -47,9 +47,24 @@ const CHARTBEAT_CONFIG = jsonLiteral({
       'T=${timestamp}&' +
       'tz=${timezone}&' +
       'C=2',
+    'subscriptionsPrefix':
+      '/ping/milkyway?' +
+      '_sh=${domain}&' +
+      '_su=${clientId(_cb)}&' +
+      '_sd=${timestamp}&' +
+      '_scp=${canonicalPath}&' +
+      'C=2',
     'baseSuffix': '&_',
     'interval': '${host}${basePrefix}${baseSuffix}',
     'anchorClick': '${host}${basePrefix}${baseSuffix}',
+    'trackPaywallShown':
+      '${host}${subscriptionsPrefix}&' +
+      '_st=ps&' +
+      '_spp=${documentReferrer}',
+    'trackConversion':
+      '${host}${subscriptionsPrefix}&' +
+      '_st=c&' +
+      '_spp=${documentReferrer}',
   },
   'triggers': {
     'trackInterval': {
@@ -71,6 +86,14 @@ const CHARTBEAT_CONFIG = jsonLiteral({
         'decayTime': 30,
       },
     },
+    'trackPaywallShown': {
+      'on': 'subscriptions-paywall-activated',
+      'request': 'trackPaywallShown',
+    },
+    'trackConversion': {
+      'on': 'subscriptions-service-activate',
+      'request': 'trackConversion',
+    }
   },
   'transport': {
     'beacon': false,
